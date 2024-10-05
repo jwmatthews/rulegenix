@@ -1,0 +1,2 @@
+# rulegenix
+Prototype rules generator
