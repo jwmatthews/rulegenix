@@ -1,0 +1,7 @@
+# Tutorial link is https://spring.io/guides/tutorials/rest
+#
+# We will use java 17 to compile this sample app
+# Using https://sdkman.io/
+
+sdk install java 17.0.12-tem
+sdk use java 17.0.12-tem
