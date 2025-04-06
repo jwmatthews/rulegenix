@@ -1,0 +1,3 @@
+https://raw.githubusercontent.com/konveyor/analyzer-lsp/refs/heads/main/docs/rules.md
+https://raw.githubusercontent.com/konveyor/kantra/refs/heads/main/docs/rules-quickstart.md
+
