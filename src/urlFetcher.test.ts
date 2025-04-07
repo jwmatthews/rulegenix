@@ -14,6 +14,11 @@ describe('UrlFetcher', () => {
     fetcher = new UrlFetcher();
     mockGet = jest.fn();
     (axios.get as unknown) = mockGet;
+    jest.clearAllMocks();
+  });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
   });
 
   describe('fetchUrls', () => {
@@ -87,7 +92,6 @@ describe('UrlFetcher', () => {
         
         https://example.net
       `;
-
       mockGet.mockResolvedValueOnce({
         data: fileContent,
         status: 200
