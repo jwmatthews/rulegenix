@@ -1,5 +1,5 @@
 import axios, { AxiosError } from 'axios';
-
+import { readFile } from 'fs/promises'
 export interface FetchResult {
   url: string;
   content: string;
@@ -43,16 +43,11 @@ export class UrlFetcher {
    * @param filePath Path to file containing URLs (one per line)
    * @returns Promise resolving to array of URLs
    */
-  async readUrlsFromFile(filePath: string): Promise<string[]> {
-    try {
-      const response = await axios.get(filePath);
-      return response.data
-        .split('\n')
-        .map((line: string) => line.trim())
-        .filter((line: string) => line && !line.startsWith('#'));
-    } catch (error) {
-      const axiosError = error as AxiosError;
-      throw new Error(`Failed to read URLs from file: ${axiosError.message}`);
-    }
+  async readUrlsFromFile(path: string): Promise<string[]> {
+    const contents = await readFile(path, 'utf-8')
+    return contents
+      .split(/\r?\n/)
+      .map(line => line.trim())
+      .filter(line => line.length > 0 && !line.startsWith('#')) // skip blanks/comments
   }
-} 
+}
