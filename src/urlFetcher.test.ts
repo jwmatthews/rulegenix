@@ -116,7 +116,7 @@ describe("UrlFetcher", () => {
       });
 
       await expect(fetcher.readUrlsFromFile("nonexistent.txt")).rejects.toThrow(
-        "Failed to read URLs from file: File not found",
+        "ENOENT: no such file or directory, open 'nonexistent.txt'"
       );
     });
   });

@@ -9,8 +9,9 @@
   },
   "scripts": {
     "build": "tsc",
+    "clean": "rm -rf dist",
     "start": "node dist/cli.js",
-    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
+    "test": "npm run clean && node --experimental-vm-modules node_modules/.bin/jest"
   },
   "keywords": [],
   "author": "",

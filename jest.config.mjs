@@ -1,5 +1,5 @@
 /** @type {import('ts-jest').JestConfigWithTsJest} */
-export default {
+/*export default {
   preset: 'ts-jest',
   testEnvironment: 'node',
   extensionsToTreatAsEsm: ['.ts'],
@@ -15,4 +15,19 @@ export default {
       },
     ],
   },
-}; 
+};
+*/
+
+export default {
+  preset: 'ts-jest/presets/default-esm',
+  testEnvironment: 'node',
+  transform: {},
+  extensionsToTreatAsEsm: ['.ts'],
+  moduleNameMapper: {
+    '^(\\.{1,2}/.*)\\.js$': '$1', // strip `.js` for TypeScript source
+  },
+  testPathIgnorePatterns: ['<rootDir>/dist/'],
+  transform: {
+    '^.+\\.ts$': ['ts-jest', { useESM: true }]
+  }
+};
