@@ -5,6 +5,8 @@ import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import { readFileSync } from 'fs';
 import { UrlFetcher } from './urlFetcher.js';
+//import { getChatModel } from './llm/chat-model.js';
+import { getChatModel } from '@llm';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -58,6 +60,22 @@ program
         console.log(`Content length: ${result.content.length} characters`);
       }
     });
+  });
+
+program
+  .command('llm-test')
+  .description('Test command to verify LLM is working')
+  .option('-o, --openai <openai>', 'Use OpenAI')
+  .option('-b, --bedrock <bedrock>', 'Use Bedrock')
+  .action(async (options) => {
+    try {
+      const chatModel = getChatModel();
+      const msg = await chatModel.invoke("what is LangSmith?");
+      console.log(msg);
+      console.log('CLI is working correctly!');
+    } catch (error) {
+      console.error(error);
+    }
   });
 
 program.parse(); 

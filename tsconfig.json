@@ -19,7 +19,13 @@
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,
-    "preserveWatchOutput": true
+    "preserveWatchOutput": true,
+    // Setting baseUrl and paths to make it easier for importing
+    "baseUrl": "./src",
+    "paths": {
+      "@llm": ["llm/index.ts"],
+      "@llm/*": ["llm/*"],
+    }
   },
   "include": ["src"],
   "ts-node": {
