@@ -5,7 +5,7 @@ import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import { readFileSync } from 'fs';
 import { UrlFetcher } from './urlFetcher.js';
-//import { getChatModel } from './llm/chat-model.js';
+import { ConfigLoader, RulegenixConfig } from '@config';
 import { getChatModel } from '@llm';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -65,11 +65,12 @@ program
 program
   .command('llm-test')
   .description('Test command to verify LLM is working')
-  .option('-o, --openai <openai>', 'Use OpenAI')
-  .option('-b, --bedrock <bedrock>', 'Use Bedrock')
+  .option('-c, --config <config.yaml>', 'LLM Provider configuration file')
   .action(async (options) => {
     try {
-      const chatModel = getChatModel();
+      const configLoader = ConfigLoader.getInstance(options.config);
+      const config = configLoader.getConfig();
+      const chatModel = getChatModel(config);
       const msg = await chatModel.invoke("what is LangSmith?");
       console.log(msg);
       console.log('CLI is working correctly!');

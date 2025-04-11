@@ -2,7 +2,7 @@
 import { jest } from "@jest/globals";
 import type { Mock } from "jest-mock";
 import axios from "axios";
-import { UrlFetcher } from "./urlFetcher.js";
+import { UrlFetcher } from "../urlFetcher.js";
 
 import fs from "fs/promises";
 import os from "os";

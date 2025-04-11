@@ -25,6 +25,8 @@
     "paths": {
       "@llm": ["llm/index.ts"],
       "@llm/*": ["llm/*"],
+      "@config": ["config/index.ts"],
+      "@config/*": ["config/*"]
     }
   },
   "include": ["src"],

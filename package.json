@@ -8,10 +8,12 @@
     "rulegenix": "./dist/cli.js"
   },
   "scripts": {
-    "build": "tsup src/cli.ts --format esm --out-dir dist",
+    "typecheck": "tsc --noEmit",
+    "build": "npm run typecheck && tsup src/cli.ts --format esm --out-dir dist",
     "clean": "rm -rf dist",
     "dev": "tsup src/cli.ts --watch --format esm --out-dir dist",
     "start": "node dist/cli.js",
+    "llm-test": "npm run start -- llm-test -c data/config.yaml",
     "test": "npm run clean && node --experimental-vm-modules node_modules/.bin/jest"
   },
   "keywords": [],
@@ -20,11 +22,14 @@
     "@aws-sdk/client-bedrock-runtime": "^3.535.0",
     "@langchain/community": "^0.0.36",
     "@langchain/openai": "^0.5.5",
+    "@types/js-yaml": "^4.0.9",
     "axios": "^1.6.7",
     "commander": "^12.0.0",
+    "js-yaml": "^4.1.0",
     "langchain": "^0.3.21",
     "tsx": "^4.19.3",
-    "yargs": "^17.7.2"
+    "yargs": "^17.7.2",
+    "zod": "^3.24.2"
   },
   "devDependencies": {
     "@types/jest": "^29.5.12",
