@@ -1,5 +1,6 @@
 import { ChatOpenAI } from "@langchain/openai";
 import { BedrockChat } from "@langchain/community/chat_models/bedrock";
+import { ChatAnthropic } from "@langchain/anthropic";
 
 import { RulegenixConfig, getActiveProvider, isBedrockConfig, isOpenAIConfig, isAnthropicConfig } from '@config';
 
@@ -31,8 +32,11 @@ export const getChatModel = (config: RulegenixConfig) => {
             if (!isAnthropicConfig(provider)) {
                 throw new Error('Invalid Anthropic configuration');
             }
-            // Note: You'll need to implement Anthropic provider integration
-            throw new Error('Anthropic provider not yet implemented');
+            return new ChatAnthropic({
+                model: provider.model,
+                temperature: provider.temperature,
+                maxTokens: provider.maxTokens || undefined
+            });
 
         default:
             throw new Error(`Unsupported provider info: ${provider}`);

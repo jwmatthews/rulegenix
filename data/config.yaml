@@ -1,5 +1,5 @@
 llm:
-  activeProvider: aws-claude
+  activeProvider: anthropic-claude
   providers:
     gpt4o:
       type: openai
@@ -7,10 +7,11 @@ llm:
       temperature: 0.7
       maxTokens: 2000
     
-    staging-claude:
+    anthropic-claude:
       type: anthropic
-      model: claude-2
-      maxTokensToSample: 1000
+      model: "claude-3-7-sonnet-20250219"
+      temperature: 0.01
+      maxTokens: 16834
     
     aws-claude:
       type: bedrock
