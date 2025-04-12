@@ -1,6 +1,6 @@
 // src/config/__tests__/config.test.ts
 
-import { validateConfig, RulegenixConfig, getActiveProvider } from '../config';
+import { validateConfig, RulegenixConfig, getActiveProvider, isXAIConfig } from '../config';
 
 describe('Configuration Validation', () => {
   const validConfig: RulegenixConfig = {
@@ -16,12 +16,25 @@ describe('Configuration Validation', () => {
         'staging-claude': {
           type: 'anthropic',
           model: 'claude-2',
-          maxTokensToSample: 1000
+          temperature: 0.01,
+          maxTokens: 16834,
         },
         'aws-claude': {
           type: 'bedrock',
           model: 'anthropic.claude-v2',
           region: 'us-east-1'
+        },
+        'gemini-pro': {
+          type: 'google',
+          model: 'gemini-2.5-pro-exp-03-25',
+          temperature: 0.7
+        },
+        'xai-model': {
+          type: 'xai',
+          model: 'xai-model',
+          temperature: 0.7,
+          maxTokens: 2000,
+          maxRetries: 3
         }
       }
     }
@@ -30,6 +43,30 @@ describe('Configuration Validation', () => {
   describe('validateConfig', () => {
     it('should validate a correct configuration', () => {
       expect(() => validateConfig(validConfig)).not.toThrow();
+    });
+
+    it('should validate Google GenAI configuration', () => {
+      const config = {
+        llm: {
+          activeProvider: 'gemini-pro',
+          providers: {
+            'gemini-pro': validConfig.llm.providers['gemini-pro']
+          }
+        }
+      };
+      expect(() => validateConfig(config as RulegenixConfig)).not.toThrow();
+    });
+
+    it('should validate XAI configuration', () => {
+      const config = {
+        llm: {
+          activeProvider: 'xai-model',
+          providers: {
+            'xai-model': validConfig.llm.providers['xai-model']
+          }
+        }
+      };
+      expect(() => validateConfig(config as RulegenixConfig)).not.toThrow();
     });
 
     it('should fail on missing active provider', () => {
@@ -102,6 +139,31 @@ describe('Configuration Validation', () => {
     it('should return the active provider configuration', () => {
       const activeProvider = getActiveProvider(validConfig);
       expect(activeProvider).toEqual(validConfig.llm.providers['production-gpt4']);
+    });
+
+    it('should return Google GenAI provider when active', () => {
+      const config = {
+        llm: {
+          ...validConfig.llm,
+          activeProvider: 'gemini-pro'
+        }
+      };
+      const provider = getActiveProvider(config as RulegenixConfig);
+      expect(provider.type).toBe('google');
+      expect(provider.model).toBe('gemini-2.5-pro-exp-03-25');
+    });
+
+    it('should return XAI provider when active', () => {
+      const config = {
+        llm: {
+          ...validConfig.llm,
+          activeProvider: 'xai-model'
+        }
+      };
+      const provider = getActiveProvider(config as RulegenixConfig);
+      expect(provider.type).toBe('xai');
+      expect(provider.maxRetries).toBe(3);
+      expect(isXAIConfig(provider)).toBe(true);
     });
 
     it('should throw error for non-existent provider', () => {

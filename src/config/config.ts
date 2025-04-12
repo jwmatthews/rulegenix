@@ -6,6 +6,7 @@ interface BaseProviderConfig {
   model: string;
   temperature?: number;
   maxTokens?: number;
+  maxRetries?: number;
 }
 
 // Provider-specific configurations
@@ -24,7 +25,6 @@ interface BedrockConfig extends BaseProviderConfig {
 interface AnthropicConfig extends BaseProviderConfig {
   type: 'anthropic';
   apiKey?: string;
-  maxTokensToSample?: number;
 }
 
 interface GoogleGenAIConfig extends BaseProviderConfig {
@@ -32,8 +32,13 @@ interface GoogleGenAIConfig extends BaseProviderConfig {
   apiKey?: string;
 }
 
+interface XAIConfig extends BaseProviderConfig {
+  type: 'xai';
+  apiKey?: string;
+}
+
 // Union type of all possible provider configs
-type ProviderConfig = OpenAIConfig | BedrockConfig | AnthropicConfig | GoogleGenAIConfig;
+type ProviderConfig = OpenAIConfig | BedrockConfig | AnthropicConfig | GoogleGenAIConfig | XAIConfig;
 
 // Type guard functions to check provider types
 export const isOpenAIConfig = (config: ProviderConfig): config is OpenAIConfig => 
@@ -47,6 +52,9 @@ export const isAnthropicConfig = (config: ProviderConfig): config is AnthropicCo
 
 export const isGoogleGenAIConfig = (config: ProviderConfig): config is GoogleGenAIConfig =>
   config.type === 'google';
+
+export const isXAIConfig = (config: ProviderConfig): config is XAIConfig =>
+  config.type === 'xai';
 
 // Main configuration interface
 export interface RulegenixConfig {
@@ -117,6 +125,12 @@ export function validateConfig(config: unknown): config is RulegenixConfig {
       case 'google':
         if (!isGoogleGenAIConfig(provider)) {
           throw new Error(`Invalid Google GenAI configuration for provider '${name}'`);
+        }
+        break;
+
+      case 'xai':
+        if (!isXAIConfig(provider)) {
+          throw new Error(`Invalid XAI configuration for provider '${name}'`);
         }
         break;
 

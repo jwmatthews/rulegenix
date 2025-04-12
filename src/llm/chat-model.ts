@@ -2,8 +2,9 @@ import { ChatOpenAI } from "@langchain/openai";
 import { BedrockChat } from "@langchain/community/chat_models/bedrock";
 import { ChatAnthropic } from "@langchain/anthropic";
 import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
+import { ChatXAI } from "@langchain/xai";
 
-import { RulegenixConfig, getActiveProvider, isBedrockConfig, isOpenAIConfig, isAnthropicConfig, isGoogleGenAIConfig } from '@config';
+import { RulegenixConfig, getActiveProvider, isBedrockConfig, isOpenAIConfig, isAnthropicConfig, isGoogleGenAIConfig, isXAIConfig } from '@config';
 
 export const getChatModel = (config: RulegenixConfig) => {
     const provider = getActiveProvider(config);
@@ -46,6 +47,17 @@ export const getChatModel = (config: RulegenixConfig) => {
             return new ChatGoogleGenerativeAI({
                 model: provider.model,
                 temperature: provider.temperature,
+            });
+
+        case 'xai':
+            if (!isXAIConfig(provider)) {
+                throw new Error('Invalid XAI configuration');
+            }
+            return new ChatXAI({
+                model: provider.model,
+                temperature: provider.temperature,
+                maxTokens: provider.maxTokens,
+                maxRetries: provider.maxRetries
             });
 
         default:

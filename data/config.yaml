@@ -1,5 +1,5 @@
 llm:
-  activeProvider: google-genai-gemini-2.0-flash
+  activeProvider: xai-model
   providers:
     gpt4o:
       type: openai
@@ -26,4 +26,8 @@ llm:
       type: google
       model: "gemini-2.0-flash"
 
-      
+    xai-model:
+      type: xai
+      model: "grok-3-latest"
+      temperature: 0.01
+      maxTokens: 16834
