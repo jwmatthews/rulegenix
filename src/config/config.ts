@@ -27,8 +27,13 @@ interface AnthropicConfig extends BaseProviderConfig {
   maxTokensToSample?: number;
 }
 
+interface GoogleGenAIConfig extends BaseProviderConfig {
+  type: 'google';
+  apiKey?: string;
+}
+
 // Union type of all possible provider configs
-type ProviderConfig = OpenAIConfig | BedrockConfig | AnthropicConfig;
+type ProviderConfig = OpenAIConfig | BedrockConfig | AnthropicConfig | GoogleGenAIConfig;
 
 // Type guard functions to check provider types
 export const isOpenAIConfig = (config: ProviderConfig): config is OpenAIConfig => 
@@ -39,6 +44,9 @@ export const isBedrockConfig = (config: ProviderConfig): config is BedrockConfig
 
 export const isAnthropicConfig = (config: ProviderConfig): config is AnthropicConfig =>
   config.type === 'anthropic';
+
+export const isGoogleGenAIConfig = (config: ProviderConfig): config is GoogleGenAIConfig =>
+  config.type === 'google';
 
 // Main configuration interface
 export interface RulegenixConfig {
@@ -103,6 +111,12 @@ export function validateConfig(config: unknown): config is RulegenixConfig {
       case 'anthropic':
         if (!isAnthropicConfig(provider)) {
           throw new Error(`Invalid Anthropic configuration for provider '${name}'`);
+        }
+        break;
+
+      case 'google':
+        if (!isGoogleGenAIConfig(provider)) {
+          throw new Error(`Invalid Google GenAI configuration for provider '${name}'`);
         }
         break;
 
