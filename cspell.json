@@ -2,11 +2,12 @@
   "version": "0.2",
   "language": "en",
   "words": [
-    "rulegenix",
-    "openai",
-    "bedrock",
     "anthropic",
-    "langchain"
+    "bedrock",
+    "langchain",
+    "langgraph",
+    "openai",
+    "rulegenix"
   ],
   "ignorePaths": [
     "node_modules/**",

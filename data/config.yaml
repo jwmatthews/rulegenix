@@ -1,5 +1,5 @@
 llm:
-  activeProvider: xai-model
+  activeProvider: aws-claude
   providers:
     gpt4o:
       type: openai

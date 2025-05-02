@@ -5,6 +5,7 @@ import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import { readFileSync } from 'fs';
 import { UrlFetcher } from './urlFetcher.js';
+import { graph } from './agents/research/graph.js';
 import { ConfigLoader, RulegenixConfig } from '@config';
 import { getChatModel } from '@llm';
 
@@ -74,6 +75,27 @@ program
       const msg = await chatModel.invoke("what is LangSmith?");
       console.log(msg);
       console.log('CLI is working correctly!');
+    } catch (error) {
+      console.error(error);
+    }
+  });
+
+  program
+  .command('research-agent')
+  .description('Execute a migration research agent to find information')
+  .option('-c, --config <config.yaml>', 'LLM Provider configuration file')
+  .requiredOption('-t, --topic <topic>', 'Migration topic to research')
+  .action(async (options) => {
+    try {
+      const configLoader = ConfigLoader.getInstance(options.config);
+      const config = configLoader.getConfig();
+      const chatModel = getChatModel(config);
+      const topic = options.topic;
+      console.log(`Researching ${topic}...`);
+
+      let result = await graph.invoke({ research_topic: topic, chat_model: chatModel });
+      console.log(result);
+
     } catch (error) {
       console.error(error);
     }
