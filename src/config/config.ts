@@ -1,4 +1,4 @@
-import { AwsCredentialIdentity } from "@aws-sdk/types";
+import { AwsCredentialIdentity } from '@aws-sdk/types';
 
 // Common parameters that all LLM providers might share
 interface BaseProviderConfig {
@@ -44,10 +44,16 @@ interface GroqConfig extends BaseProviderConfig {
 }
 
 // Union type of all possible provider configs
-type ProviderConfig = OpenAIConfig | BedrockConfig | AnthropicConfig | GoogleGenAIConfig | XAIConfig | GroqConfig;
+type ProviderConfig =
+  | OpenAIConfig
+  | BedrockConfig
+  | AnthropicConfig
+  | GoogleGenAIConfig
+  | XAIConfig
+  | GroqConfig;
 
 // Type guard functions to check provider types
-export const isOpenAIConfig = (config: ProviderConfig): config is OpenAIConfig => 
+export const isOpenAIConfig = (config: ProviderConfig): config is OpenAIConfig =>
   config.type === 'openai';
 
 export const isBedrockConfig = (config: ProviderConfig): config is BedrockConfig =>
@@ -59,8 +65,7 @@ export const isAnthropicConfig = (config: ProviderConfig): config is AnthropicCo
 export const isGoogleGenAIConfig = (config: ProviderConfig): config is GoogleGenAIConfig =>
   config.type === 'google';
 
-export const isXAIConfig = (config: ProviderConfig): config is XAIConfig =>
-  config.type === 'xai';
+export const isXAIConfig = (config: ProviderConfig): config is XAIConfig => config.type === 'xai';
 
 export const isGroqConfig = (config: ProviderConfig): config is GroqConfig =>
   config.type === 'groq';
@@ -82,24 +87,26 @@ function assertNever(x: never): never {
 export function getActiveProvider(config: RulegenixConfig): ProviderConfig {
   const activeProvider = config.llm.activeProvider;
   const provider = config.llm.providers[activeProvider];
-  
+
   if (!provider) {
     throw new Error(`Active provider '${activeProvider}' not found in configuration`);
   }
-  
+
   return provider;
 }
 
 // Validation function to ensure config is valid
 export function validateConfig(config: unknown): config is RulegenixConfig {
   const conf = config as RulegenixConfig;
-  
+
   if (!conf?.llm?.activeProvider || !conf?.llm?.providers) {
     throw new Error('Invalid configuration: missing llm section or required fields');
   }
 
   if (!conf.llm.providers[conf.llm.activeProvider]) {
-    throw new Error(`Active provider '${conf.llm.activeProvider}' not found in providers configuration`);
+    throw new Error(
+      `Active provider '${conf.llm.activeProvider}' not found in providers configuration`,
+    );
   }
 
   // Validate each provider configuration
@@ -118,7 +125,7 @@ export function validateConfig(config: unknown): config is RulegenixConfig {
           throw new Error(`Bedrock provider '${name}' missing required field: region`);
         }
         break;
-      
+
       case 'openai':
         if (!isOpenAIConfig(provider)) {
           throw new Error(`Invalid OpenAI configuration for provider '${name}'`);

@@ -22,22 +22,22 @@ describe('Configuration Validation', () => {
         'aws-claude': {
           type: 'bedrock',
           model: 'anthropic.claude-v2',
-          region: 'us-east-1'
+          region: 'us-east-1',
         },
         'gemini-pro': {
           type: 'google',
           model: 'gemini-2.5-pro-exp-03-25',
-          temperature: 0.7
+          temperature: 0.7,
         },
         'xai-model': {
           type: 'xai',
           model: 'xai-model',
           temperature: 0.7,
           maxTokens: 2000,
-          maxRetries: 3
-        }
-      }
-    }
+          maxRetries: 3,
+        },
+      },
+    },
   };
 
   describe('validateConfig', () => {
@@ -50,9 +50,9 @@ describe('Configuration Validation', () => {
         llm: {
           activeProvider: 'gemini-pro',
           providers: {
-            'gemini-pro': validConfig.llm.providers['gemini-pro']
-          }
-        }
+            'gemini-pro': validConfig.llm.providers['gemini-pro'],
+          },
+        },
       };
       expect(() => validateConfig(config as RulegenixConfig)).not.toThrow();
     });
@@ -62,9 +62,9 @@ describe('Configuration Validation', () => {
         llm: {
           activeProvider: 'xai-model',
           providers: {
-            'xai-model': validConfig.llm.providers['xai-model']
-          }
-        }
+            'xai-model': validConfig.llm.providers['xai-model'],
+          },
+        },
       };
       expect(() => validateConfig(config as RulegenixConfig)).not.toThrow();
     });
@@ -72,8 +72,8 @@ describe('Configuration Validation', () => {
     it('should fail on missing active provider', () => {
       const invalidConfig = {
         llm: {
-          providers: { ...validConfig.llm.providers }
-        }
+          providers: { ...validConfig.llm.providers },
+        },
       };
       expect(() => validateConfig(invalidConfig)).toThrow('missing llm section or required fields');
     });
@@ -82,8 +82,8 @@ describe('Configuration Validation', () => {
       const invalidConfig = {
         llm: {
           ...validConfig.llm,
-          activeProvider: 'non-existent-provider'
-        }
+          activeProvider: 'non-existent-provider',
+        },
       };
       expect(() => validateConfig(invalidConfig)).toThrow('not found in providers configuration');
     });
@@ -95,10 +95,10 @@ describe('Configuration Validation', () => {
           providers: {
             'invalid-provider': {
               type: 'invalid-type',
-              model: 'some-model'
-            }
-          }
-        }
+              model: 'some-model',
+            },
+          },
+        },
       };
       expect(() => validateConfig(invalidConfig)).toThrow('Unexpected provider type');
     });
@@ -109,11 +109,11 @@ describe('Configuration Validation', () => {
           activeProvider: 'incomplete-provider',
           providers: {
             'incomplete-provider': {
-              type: 'openai'
+              type: 'openai',
               // missing model field
-            }
-          }
-        }
+            },
+          },
+        },
       };
       expect(() => validateConfig(invalidConfig)).toThrow('missing required fields');
     });
@@ -125,11 +125,11 @@ describe('Configuration Validation', () => {
           providers: {
             'invalid-bedrock': {
               type: 'bedrock',
-              model: 'anthropic.claude-v2'
+              model: 'anthropic.claude-v2',
               // missing region field
-            }
-          }
-        }
+            },
+          },
+        },
       };
       expect(() => validateConfig(invalidConfig)).toThrow('missing required field: region');
     });
@@ -145,8 +145,8 @@ describe('Configuration Validation', () => {
       const config = {
         llm: {
           ...validConfig.llm,
-          activeProvider: 'gemini-pro'
-        }
+          activeProvider: 'gemini-pro',
+        },
       };
       const provider = getActiveProvider(config as RulegenixConfig);
       expect(provider.type).toBe('google');
@@ -157,8 +157,8 @@ describe('Configuration Validation', () => {
       const config = {
         llm: {
           ...validConfig.llm,
-          activeProvider: 'xai-model'
-        }
+          activeProvider: 'xai-model',
+        },
       };
       const provider = getActiveProvider(config as RulegenixConfig);
       expect(provider.type).toBe('xai');
@@ -170,20 +170,21 @@ describe('Configuration Validation', () => {
       const invalidConfig = {
         llm: {
           ...validConfig.llm,
-          activeProvider: 'non-existent-provider'
-        }
+          activeProvider: 'non-existent-provider',
+        },
       };
-      expect(() => getActiveProvider(invalidConfig as RulegenixConfig))
-        .toThrow('Active provider \'non-existent-provider\' not found in configuration');
+      expect(() => getActiveProvider(invalidConfig as RulegenixConfig)).toThrow(
+        "Active provider 'non-existent-provider' not found in configuration",
+      );
     });
 
     it('should return different providers when activeProvider changes', () => {
       const config1 = { ...validConfig };
-      const config2 = { 
+      const config2 = {
         llm: {
           ...validConfig.llm,
-          activeProvider: 'staging-claude'
-        }
+          activeProvider: 'staging-claude',
+        },
       };
 
       const provider1 = getActiveProvider(config1);

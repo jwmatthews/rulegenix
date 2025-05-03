@@ -1,7 +1,7 @@
-import { StateGraph } from "@langchain/langgraph";
-import { RunnableConfig } from "@langchain/core/runnables";
-import { HumanMessage } from "@langchain/core/messages";
-import { StateAnnotation } from "./state.js";
+import { StateGraph } from '@langchain/langgraph';
+import { RunnableConfig } from '@langchain/core/runnables';
+import { HumanMessage } from '@langchain/core/messages';
+import { StateAnnotation } from './state.js';
 
 /**
  * Define a node, these do the work of the graph and should have most of the logic.
@@ -11,11 +11,10 @@ import { StateAnnotation } from "./state.js";
  * @returns Some subset of parameters of the graph state, used to update the state
  * for the edges and nodes executed next.
  */
- const callModel = async (
+const callModel = async (
   state: typeof StateAnnotation.State,
   _config: RunnableConfig,
 ): Promise<typeof StateAnnotation.Update> => {
-  
   const { chat_model, research_topic, messages = [] } = state;
   const userMessage = new HumanMessage(`What do you know about ${research_topic}?`);
   const startTime = performance.now();
@@ -27,8 +26,8 @@ import { StateAnnotation } from "./state.js";
   return {
     messages: [
       ...messages,
-      { role: "user", content: userMessage.content },
-      { role: "assistant", content: response.content },
+      { role: 'user', content: userMessage.content },
+      { role: 'assistant', content: response.content },
     ],
   };
 };
@@ -40,22 +39,20 @@ import { StateAnnotation } from "./state.js";
  * @param state - The current state of the research builder
  * @returns Either "callModel" to continue research or END to finish the builder
  */
-export const route = (
-  state: typeof StateAnnotation.State,
-): "__end__" | "callModel" => {
+export const route = (state: typeof StateAnnotation.State): '__end__' | 'callModel' => {
   console.log(`Let's see how many messages we have: ${state.messages.length}`);
   if (state.messages.length > 4) {
-    return "__end__";
+    return '__end__';
   }
   // Loop back
-  return "callModel";
+  return 'callModel';
 };
 
 const builder = new StateGraph(StateAnnotation)
-  .addNode("callModel", callModel)
-  .addEdge("__start__", "callModel")
-  .addConditionalEdges("callModel", route);
+  .addNode('callModel', callModel)
+  .addEdge('__start__', 'callModel')
+  .addConditionalEdges('callModel', route);
 
 export const graph = builder.compile();
 
-graph.name = "Research Agent";
+graph.name = 'Research Agent';

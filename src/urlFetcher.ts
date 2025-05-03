@@ -1,5 +1,5 @@
 import axios, { AxiosError } from 'axios';
-import { readFile } from 'fs/promises'
+import { readFile } from 'fs/promises';
 export interface FetchResult {
   url: string;
   content: string;
@@ -22,7 +22,7 @@ export class UrlFetcher {
         results.push({
           url,
           content: response.data,
-          status: response.status
+          status: response.status,
         });
       } catch (error) {
         const axiosError = error as AxiosError;
@@ -30,7 +30,7 @@ export class UrlFetcher {
           url,
           content: '',
           status: axiosError.response?.status || 0,
-          error: axiosError.message
+          error: axiosError.message,
         });
       }
     }
@@ -44,10 +44,10 @@ export class UrlFetcher {
    * @returns Promise resolving to array of URLs
    */
   async readUrlsFromFile(path: string): Promise<string[]> {
-    const contents = await readFile(path, 'utf-8')
+    const contents = await readFile(path, 'utf-8');
     return contents
       .split(/\r?\n/)
-      .map(line => line.trim())
-      .filter(line => line.length > 0 && !line.startsWith('#')) // skip blanks/comments
+      .map((line) => line.trim())
+      .filter((line) => line.length > 0 && !line.startsWith('#')); // skip blanks/comments
   }
 }

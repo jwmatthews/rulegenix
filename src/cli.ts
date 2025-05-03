@@ -12,16 +12,11 @@ import { getChatModel } from '@llm';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const packageJson = JSON.parse(
-  readFileSync(join(__dirname, '..', 'package.json'), 'utf8')
-);
+const packageJson = JSON.parse(readFileSync(join(__dirname, '..', 'package.json'), 'utf8'));
 
 const program = new Command();
 
-program
-  .name('rulegenix')
-  .description('CLI tool for rule generation')
-  .version(packageJson.version);
+program.name('rulegenix').description('CLI tool for rule generation').version(packageJson.version);
 
 program
   .command('test')
@@ -52,7 +47,7 @@ program
     const results = await fetcher.fetchUrls(urls);
 
     // Print results
-    results.forEach(result => {
+    results.forEach((result) => {
       console.log(`\nURL: ${result.url}`);
       console.log(`Status: ${result.status}`);
       if (result.error) {
@@ -72,7 +67,7 @@ program
       const configLoader = ConfigLoader.getInstance(options.config);
       const config = configLoader.getConfig();
       const chatModel = getChatModel(config);
-      const msg = await chatModel.invoke("what is LangSmith?");
+      const msg = await chatModel.invoke('what is LangSmith?');
       console.log(msg);
       console.log('CLI is working correctly!');
     } catch (error) {
@@ -80,7 +75,7 @@ program
     }
   });
 
-  program
+program
   .command('research-agent')
   .description('Execute a migration research agent to find information')
   .option('-c, --config <config.yaml>', 'LLM Provider configuration file')
@@ -95,10 +90,9 @@ program
 
       let result = await graph.invoke({ research_topic: topic, chat_model: chatModel });
       console.log(result);
-
     } catch (error) {
       console.error(error);
     }
   });
 
-program.parse(); 
+program.parse();
