@@ -37,8 +37,14 @@ interface XAIConfig extends BaseProviderConfig {
   apiKey?: string;
 }
 
+interface GroqConfig extends BaseProviderConfig {
+  type: 'groq';
+  apiKey?: string;
+  modelName?: string;
+}
+
 // Union type of all possible provider configs
-type ProviderConfig = OpenAIConfig | BedrockConfig | AnthropicConfig | GoogleGenAIConfig | XAIConfig;
+type ProviderConfig = OpenAIConfig | BedrockConfig | AnthropicConfig | GoogleGenAIConfig | XAIConfig | GroqConfig;
 
 // Type guard functions to check provider types
 export const isOpenAIConfig = (config: ProviderConfig): config is OpenAIConfig => 
@@ -55,6 +61,9 @@ export const isGoogleGenAIConfig = (config: ProviderConfig): config is GoogleGen
 
 export const isXAIConfig = (config: ProviderConfig): config is XAIConfig =>
   config.type === 'xai';
+
+export const isGroqConfig = (config: ProviderConfig): config is GroqConfig =>
+  config.type === 'groq';
 
 // Main configuration interface
 export interface RulegenixConfig {
@@ -131,6 +140,12 @@ export function validateConfig(config: unknown): config is RulegenixConfig {
       case 'xai':
         if (!isXAIConfig(provider)) {
           throw new Error(`Invalid XAI configuration for provider '${name}'`);
+        }
+        break;
+
+      case 'groq':
+        if (!isGroqConfig(provider)) {
+          throw new Error(`Invalid Groq configuration for provider '${name}'`);
         }
         break;
 

@@ -9,5 +9,4 @@ export const StateAnnotation = Annotation.Root({
   }),
   research_topic: Annotation<string>,
   chat_model: Annotation<BaseChatModel>,
-  additionalField: Annotation<string>
 });

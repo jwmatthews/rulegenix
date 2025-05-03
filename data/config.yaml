@@ -1,10 +1,10 @@
 llm:
-  activeProvider: aws-claude
+  activeProvider: groq-llama-4-scout-17b-16e-instruct
   providers:
     gpt4o:
       type: openai
       model: gpt-4o
-      temperature: 0.7
+      temperature: 0
       maxTokens: 2000
     
     anthropic-claude:
@@ -31,3 +31,9 @@ llm:
       model: "grok-3-latest"
       temperature: 0.01
       maxTokens: 16834
+
+    groq-llama-4-scout-17b-16e-instruct:
+      type: groq
+      model: "meta-llama/llama-4-scout-17b-16e-instruct"
+      temperature: 0
+      maxTokens: 8192

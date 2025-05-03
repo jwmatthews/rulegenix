@@ -4,6 +4,7 @@
   "words": [
     "anthropic",
     "bedrock",
+    "groq",
     "langchain",
     "langgraph",
     "openai",

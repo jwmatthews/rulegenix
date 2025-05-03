@@ -3,8 +3,9 @@ import { BedrockChat } from "@langchain/community/chat_models/bedrock";
 import { ChatAnthropic } from "@langchain/anthropic";
 import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
 import { ChatXAI } from "@langchain/xai";
+import { ChatGroq } from "@langchain/groq";
 
-import { RulegenixConfig, getActiveProvider, isBedrockConfig, isOpenAIConfig, isAnthropicConfig, isGoogleGenAIConfig, isXAIConfig } from '@config';
+import { RulegenixConfig, getActiveProvider, isBedrockConfig, isOpenAIConfig, isAnthropicConfig, isGoogleGenAIConfig, isXAIConfig, isGroqConfig } from '@config';
 
 export const getChatModel = (config: RulegenixConfig) => {
     const provider = getActiveProvider(config);
@@ -60,6 +61,15 @@ export const getChatModel = (config: RulegenixConfig) => {
                 maxRetries: provider.maxRetries
             });
 
+        case 'groq':
+            if (!isGroqConfig(provider)) {
+                throw new Error('Invalid Groq configuration');
+            }
+            return new ChatGroq({
+                model: provider.model,
+                temperature: provider.temperature,
+                maxTokens: provider.maxTokens,
+            });
         default:
             throw new Error(`Unsupported provider info: ${provider}`);
     }
