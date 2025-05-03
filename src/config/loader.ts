@@ -1,6 +1,5 @@
 import { load } from 'js-yaml';
 import { readFileSync } from 'fs';
-import { z } from 'zod';
 import type { RulegenixConfig } from './config';
 
 export class ConfigLoader {

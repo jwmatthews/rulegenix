@@ -5,7 +5,7 @@
 
     "target": "ES2023",
     "lib": ["ES2023"],
-   
+
     "outDir": "dist",
     "rootDir": "src",
 
@@ -26,7 +26,9 @@
       "@llm": ["llm/index.ts"],
       "@llm/*": ["llm/*"],
       "@config": ["config/index.ts"],
-      "@config/*": ["config/*"]
+      "@config/*": ["config/*"],
+      "@utils": ["utils.ts"],
+      "@utils/*": ["utils.ts"]
     }
   },
   "include": ["src"],

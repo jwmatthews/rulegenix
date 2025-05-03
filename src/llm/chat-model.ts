@@ -28,6 +28,8 @@ export const getChatModel = (config: RulegenixConfig) => {
         model: provider.model,
         region: provider.region,
         credentials: provider.credentials,
+        temperature: provider.temperature,
+        maxTokens: provider.maxTokens,
       });
 
     case 'openai':

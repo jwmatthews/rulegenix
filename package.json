@@ -15,7 +15,7 @@
     "format:check": "prettier --check \"src/**/*.{ts,tsx,js,json,md}\"",
     "lint": "eslint src",
     "llm-test": "npm run clean && npm run build && npm run start -- llm-test -c data/config.yaml",
-    "research-agent": "npm run clean && npm run build && npm run start -- research-agent -c data/config.yaml -t \"log4j 1.x to 2.x migration\"",
+    "research-agent": "npm run clean && npm run build && npm run start -- research-agent -c data/config.yaml -s \"log4j 1.x to 2.x migration\"",
     "start": "node dist/cli.js",
     "test": "npm run clean && node --experimental-vm-modules node_modules/.bin/jest",
     "typecheck": "tsc --noEmit"
@@ -32,6 +32,7 @@
     "@langchain/groq": "^0.2.2",
     "@langchain/langgraph": "^0.2.67",
     "@langchain/openai": "^0.5.10",
+    "@langchain/tavily": "^0.1.1",
     "@langchain/textsplitters": "^0.1.0",
     "@langchain/xai": "^0.0.2",
     "@types/js-yaml": "^4.0.9",

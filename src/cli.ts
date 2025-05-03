@@ -8,6 +8,7 @@ import { UrlFetcher } from './urlFetcher.js';
 import { graph } from './agents/research/graph.js';
 import { ConfigLoader, RulegenixConfig } from '@config';
 import { getChatModel } from '@llm';
+import { messageToChatRole } from '@utils';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -79,17 +80,30 @@ program
   .command('research-agent')
   .description('Execute a migration research agent to find information')
   .option('-c, --config <config.yaml>', 'LLM Provider configuration file')
-  .requiredOption('-t, --topic <topic>', 'Migration topic to research')
+  .requiredOption('-s, --scenario <scenario>', 'Migration scenario to research')
+  .option('-m, --max-search-results <maxSearchResults>', 'Maximum number of search results', '5')
   .action(async (options) => {
     try {
       const configLoader = ConfigLoader.getInstance(options.config);
       const config = configLoader.getConfig();
-      const chatModel = getChatModel(config);
-      const topic = options.topic;
-      console.log(`Researching ${topic}...`);
+      const scenario = options.scenario;
+      const maxSearchResults = parseInt(options.maxSearchResults);
+      console.log(`Researching ${scenario}...`);
 
-      let result = await graph.invoke({ research_topic: topic, chat_model: chatModel });
-      console.log(result);
+      let result = await graph.invoke({
+        migrationScenario: scenario,
+        llmConfig: config,
+        maxSearchResults,
+      });
+      console.log('Result:', result);
+      if (result.messages.length > 0) {
+        const lastMessage = result.messages[result.messages.length - 1];
+        console.log(
+          `Last message: Role - ${messageToChatRole(lastMessage)}, Content - ${lastMessage.content}`,
+        );
+      } else {
+        console.log('No messages found.');
+      }
     } catch (error) {
       console.error(error);
     }

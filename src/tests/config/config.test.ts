@@ -1,6 +1,6 @@
 // src/config/__tests__/config.test.ts
 
-import { validateConfig, RulegenixConfig, getActiveProvider, isXAIConfig } from '../config';
+import { validateConfig, RulegenixConfig, getActiveProvider, isXAIConfig } from '../../config';
 
 describe('Configuration Validation', () => {
   const validConfig: RulegenixConfig = {
@@ -35,6 +35,12 @@ describe('Configuration Validation', () => {
           temperature: 0.7,
           maxTokens: 2000,
           maxRetries: 3,
+        },
+        'groq-llama-4-scout-17b-16e-instruct': {
+          type: 'groq',
+          model: 'meta-llama/llama-4-scout-17b-16e-instruct',
+          temperature: 0,
+          maxTokens: 8192,
         },
       },
     },

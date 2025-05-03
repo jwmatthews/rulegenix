@@ -1,7 +1,7 @@
 import { AwsCredentialIdentity } from '@aws-sdk/types';
 
 // Common parameters that all LLM providers might share
-interface BaseProviderConfig {
+export interface BaseProviderConfig {
   type: string;
   model: string;
   temperature?: number;
@@ -10,41 +10,39 @@ interface BaseProviderConfig {
 }
 
 // Provider-specific configurations
-interface OpenAIConfig extends BaseProviderConfig {
+export interface OpenAIConfig extends BaseProviderConfig {
   type: 'openai';
   apiKey?: string;
-  modelName?: string;
 }
 
-interface BedrockConfig extends BaseProviderConfig {
+export interface BedrockConfig extends BaseProviderConfig {
   type: 'bedrock';
   region: string;
   credentials?: AwsCredentialIdentity;
 }
 
-interface AnthropicConfig extends BaseProviderConfig {
+export interface AnthropicConfig extends BaseProviderConfig {
   type: 'anthropic';
   apiKey?: string;
 }
 
-interface GoogleGenAIConfig extends BaseProviderConfig {
+export interface GoogleGenAIConfig extends BaseProviderConfig {
   type: 'google';
   apiKey?: string;
 }
 
-interface XAIConfig extends BaseProviderConfig {
+export interface XAIConfig extends BaseProviderConfig {
   type: 'xai';
   apiKey?: string;
 }
 
-interface GroqConfig extends BaseProviderConfig {
+export interface GroqConfig extends BaseProviderConfig {
   type: 'groq';
   apiKey?: string;
-  modelName?: string;
 }
 
 // Union type of all possible provider configs
-type ProviderConfig =
+export type ProviderConfig =
   | OpenAIConfig
   | BedrockConfig
   | AnthropicConfig
