@@ -8,9 +8,9 @@
     "rulegenix": "./dist/cli.js"
   },
   "scripts": {
-    "build": "npm run typecheck && tsup src/cli.ts --format esm --out-dir dist",
+    "build": "npm run typecheck && tsup src/cli.ts --format esm --out-dir dist --sourcemap",
     "clean": "rm -rf dist",
-    "dev": "tsup src/cli.ts --watch --format esm --out-dir dist",
+    "dev": "tsup src/cli.ts --watch --format esm --out-dir dist --sourcemap",
     "format": "prettier --write \"src/**/*.{ts,tsx,js,json,md}\"",
     "format:check": "prettier --check \"src/**/*.{ts,tsx,js,json,md}\"",
     "lint": "eslint src",
@@ -41,6 +41,8 @@
     "commander": "^13.1.0",
     "js-yaml": "^4.1.0",
     "langchain": "^0.3.24",
+    "source-map-support": "^0.5.21",
+    "tslog": "^4.9.3",
     "tsx": "^4.19.4",
     "yargs": "^17.7.2",
     "zod": "^3.24.3",
@@ -48,7 +50,7 @@
   },
   "devDependencies": {
     "@types/jest": "^29.5.14",
-    "@types/node": "^22.15.3",
+    "@types/node": "^22.15.17",
     "@types/yargs": "^17.0.33",
     "eslint-config-prettier": "^10.1.2",
     "jest": "^29.7.0",

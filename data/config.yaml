@@ -1,5 +1,5 @@
 llm:
-  activeProvider: groq-llama-4-scout-17b-16e-instruct
+  activeProvider: aws-anthropic-claude-3-7-sonnet
   providers:
     gpt4o:
       type: openai
@@ -16,6 +16,11 @@ llm:
     aws-claude:
       type: bedrock
       model: anthropic.claude-v2
+      region: us-east-1
+
+    aws-anthropic-claude-3-7-sonnet:
+      type: bedrock
+      model: us.anthropic.claude-3-7-sonnet-20250219-v1:0
       region: us-east-1
 
     google-genai-gemini-2.5-pro:

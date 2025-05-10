@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import 'source-map-support/register.js';
 
 import { Command } from 'commander';
 import { fileURLToPath } from 'url';
@@ -9,6 +10,8 @@ import { graph } from './agents/research/graph.js';
 import { ConfigLoader, RulegenixConfig } from '@config';
 import { getChatModel } from '@llm';
 import { messageToChatRole } from '@utils';
+import { AIMessage } from '@langchain/core/messages.js';
+import { log } from './logger';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -84,26 +87,29 @@ program
   .option('-m, --max-search-results <maxSearchResults>', 'Maximum number of search results', '5')
   .action(async (options) => {
     try {
+      const startTime = performance.now();
       const configLoader = ConfigLoader.getInstance(options.config);
       const config = configLoader.getConfig();
       const scenario = options.scenario;
       const maxSearchResults = parseInt(options.maxSearchResults);
-      console.log(`Researching ${scenario}...`);
+      log.info(`Researching ${scenario}...`);
 
       let result = await graph.invoke({
         migrationScenario: scenario,
         llmConfig: config,
         maxSearchResults,
       });
-      console.log('Result:', result);
+      log.info('Result:', result);
       if (result.messages.length > 0) {
         const lastMessage = result.messages[result.messages.length - 1];
-        console.log(
+        log.info(
           `Last message: Role - ${messageToChatRole(lastMessage)}, Content - ${lastMessage.content}`,
         );
       } else {
-        console.log('No messages found.');
+        log.info('No messages found.');
       }
+      const endTime = performance.now();
+      log.info(`'research-agent' ran for ${endTime - startTime} milliseconds`);
     } catch (error) {
       console.error(error);
     }
