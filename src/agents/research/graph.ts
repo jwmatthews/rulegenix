@@ -5,7 +5,8 @@ import { StateAnnotation } from './state.js';
 import { getChatModel } from '@llm';
 import { initializeTools, toolNode } from './tools.js';
 import { MAIN_PROMPT } from './prompts.js';
-
+import { log } from '../../logger';
+import { debugMessages, pruneToolUseMessages, toBaseMessages } from '../../utils';
 /**
  * Define a node, these do the work of the graph and should have most of the logic.
  * Must return a subset of the properties set in StateAnnotation.
@@ -26,6 +27,7 @@ const callModel = async (
   }
   const tools = initializeTools(state, _config);
 
+  //log.info('Binding tools...', tools);
   const chatModel = rawModel.bindTools([...tools], {
     tool_choice: 'auto',
   });
@@ -36,14 +38,13 @@ const callModel = async (
   );
 
   const userMessages = [{ role: 'user', content: p }, ...state.messages];
-  //const messages = [{ role: 'user', content: p }, ...state.messages];
-
   const startTime = performance.now();
   const response: AIMessage = await chatModel.invoke(userMessages, _config);
+  log.info('response:', response);
   const responseMessages = [response];
   const endTime = performance.now();
-  console.log(`Model invocation took ${endTime - startTime} milliseconds`);
-  console.log(`Response: ${response.content}`);
+  log.info(`Model invocation took ${endTime - startTime} milliseconds`);
+  log.info(`Response: ${response.content}`);
 
   let info;
   if ((response?.tool_calls && response.tool_calls?.length) || 0) {
@@ -83,9 +84,10 @@ export const route = (
   state: typeof StateAnnotation.State,
 ): 'callModel' | 'tools' | 'reflect' | '__end__' => {
   const lastMessage: AIMessage = state.messages[state.messages.length - 1];
-  console.log(
-    'Routing decision:',
+  log.info(
+    'Routing decision: lastMessage._getType() = ',
     lastMessage._getType(),
+    'lastMessage.tool_calls?.map((t) => t.name) = ',
     lastMessage.tool_calls?.map((t) => t.name),
   );
 

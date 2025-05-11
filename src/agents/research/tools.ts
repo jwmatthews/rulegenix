@@ -8,6 +8,8 @@ import { tool } from '@langchain/core/tools';
 import { TavilySearch } from '@langchain/tavily';
 import { getChatModel } from '@llm';
 import { getTextContent } from '@utils';
+import { log } from '../../logger';
+import { debugMessages } from '../../utils';
 
 export function initializeTools(state: typeof StateAnnotation.State, config: RunnableConfig) {
   const { llmConfig, maxSearchResults } = state;
@@ -45,6 +47,8 @@ export function initializeTools(state: typeof StateAnnotation.State, config: Run
 
 export const toolNode = async (state: typeof StateAnnotation.State, config: RunnableConfig) => {
   const message = state.messages[state.messages.length - 1];
+  log.debug('toolNode: message:', message);
+  log.info('toolNode: debugMessages:', debugMessages([message]));
   const tools = initializeTools(state, config);
   const outputs = await Promise.all(
     (message as AIMessage).tool_calls?.map(async (call) => {
@@ -60,7 +64,9 @@ export const toolNode = async (state: typeof StateAnnotation.State, config: Runn
             ...call.args,
           },
         };
+        log.info('Tool call:', newCall['name'], newCall['id']);
         const output = await tool.invoke({ ...newCall, type: 'tool_call' }, config);
+        log.info('Tool call succeeded:', output['name'], output['tool_call_id']);
         if (isBaseMessage(output) && output._getType() === 'tool') {
           return output;
         } else {
