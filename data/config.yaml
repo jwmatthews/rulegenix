@@ -1,16 +1,17 @@
 llm:
   activeProvider: aws-anthropic-claude-3-7-sonnet
+  #activeProvider: anthropic-claude
   providers:
     gpt4o:
       type: openai
       model: gpt-4o
       temperature: 0
-      maxTokens: 2000
+      #maxTokens: 2000
     
     anthropic-claude:
       type: anthropic
       model: "claude-3-7-sonnet-20250219"
-      temperature: 0.01
+      temperature: 0
       maxTokens: 16834
     
     aws-claude:

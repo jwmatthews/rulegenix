@@ -1,5 +1,5 @@
 import { ChatOpenAI } from '@langchain/openai';
-import { BedrockChat } from '@langchain/community/chat_models/bedrock';
+import { ChatBedrockConverse } from '@langchain/aws';
 import { ChatAnthropic } from '@langchain/anthropic';
 import { ChatGoogleGenerativeAI } from '@langchain/google-genai';
 import { ChatXAI } from '@langchain/xai';
@@ -24,7 +24,7 @@ export const getChatModel = (config: RulegenixConfig) => {
       if (!isBedrockConfig(provider)) {
         throw new Error('Invalid Bedrock configuration');
       }
-      return new BedrockChat({
+      return new ChatBedrockConverse({
         model: provider.model,
         region: provider.region,
         credentials: provider.credentials,

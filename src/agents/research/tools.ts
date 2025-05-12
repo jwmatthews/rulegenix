@@ -2,6 +2,7 @@ import { RunnableConfig } from '@langchain/core/runnables';
 import { StateAnnotation } from './state.js';
 import { AIMessage } from '@langchain/core/messages';
 import { ToolMessage, isBaseMessage } from '@langchain/core/messages';
+import { ToolNode } from '@langchain/langgraph/prebuilt';
 import { z } from 'zod';
 import { INFO_PROMPT } from './prompts.js';
 import { tool } from '@langchain/core/tools';
@@ -44,6 +45,8 @@ export function initializeTools(state: typeof StateAnnotation.State, config: Run
 
   return [searchTool, fetchTool];
 }
+
+//export const toolNode = new ToolNode(initializeTools());
 
 export const toolNode = async (state: typeof StateAnnotation.State, config: RunnableConfig) => {
   const message = state.messages[state.messages.length - 1];

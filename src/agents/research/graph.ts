@@ -39,6 +39,8 @@ const callModel = async (
 
   const userMessages = [{ role: 'user', content: p }, ...state.messages];
   const startTime = performance.now();
+  log.info('userMessages:', userMessages);
+  log.info('debugMessages(userMessages):', debugMessages(userMessages));
   const response: AIMessage = await chatModel.invoke(userMessages, _config);
   log.info('response:', response);
   const responseMessages = [response];
