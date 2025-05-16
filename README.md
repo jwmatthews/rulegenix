@@ -14,3 +14,7 @@ The intent of this project is to create a research agent that is able to:
 ## Background
 
 - I am using the [data-enrichment](https://github.com/langchain-ai/data-enrichment-js) example from langgraph.js as a starting point to form this agent
+
+## Interesting links
+
+- https://www.anthropic.com/engineering/building-effective-agents
