@@ -4,7 +4,7 @@ import { AIMessage, HumanMessage } from '@langchain/core/messages';
 import { StateAnnotation } from './state.js';
 import { getChatModel } from '@llm';
 import { initializeTools, toolNode } from './tools.js';
-import { MAIN_PROMPT } from './prompts.js';
+import { MAIN_PROMPT, system_prompt } from './prompts.js';
 import { log } from '../../logger';
 import { debugMessages, pruneToolUseMessages, toBaseMessages } from '../../utils';
 /**
@@ -32,10 +32,10 @@ const callModel = async (
     tool_choice: 'auto',
   });
 
-  const p = MAIN_PROMPT.replace('{info}', JSON.stringify(state.extractionSchema, null, 2)).replace(
-    '{scenario}',
-    state.migrationScenario,
-  );
+  //const p = MAIN_PROMPT.replace('{info}', JSON.stringify(state.extractionSchema, null, 2)).replace(
+  const p = system_prompt
+    .replace('{info}', JSON.stringify(state.extractionSchema, null, 2))
+    .replace('{scenario}', state.migrationScenario);
 
   const userMessages = [{ role: 'user', content: p }, ...state.messages];
   const startTime = performance.now();
