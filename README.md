@@ -18,3 +18,4 @@ The intent of this project is to create a research agent that is able to:
 ## Interesting links
 
 - https://www.anthropic.com/engineering/building-effective-agents
+- https://langchain-ai.github.io/langgraphjs/tutorials/workflows/

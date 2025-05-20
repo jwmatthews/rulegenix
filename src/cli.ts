@@ -6,7 +6,8 @@ import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import { readFileSync } from 'fs';
 import { UrlFetcher } from './urlFetcher.js';
-import { graph } from './agents/research/graph.js';
+import { graph as researchGraph } from './agents/research/graph.js';
+import { graph as planningGraph } from './agents/planning/graph.js';
 import { ConfigLoader, RulegenixConfig } from '@config';
 import { getChatModel } from '@llm';
 import { messageToChatRole } from '@utils';
@@ -94,7 +95,43 @@ program
       const maxSearchResults = parseInt(options.maxSearchResults);
       log.info(`Researching ${scenario}...`);
 
-      let result = await graph.invoke({
+      let result = await researchGraph.invoke({
+        migrationScenario: scenario,
+        llmConfig: config,
+        maxSearchResults,
+      });
+      log.info('Result:', result);
+      if (result.messages.length > 0) {
+        const lastMessage = result.messages[result.messages.length - 1];
+        log.info(
+          `Last message: Role - ${messageToChatRole(lastMessage)}, Content - ${lastMessage.content}`,
+        );
+      } else {
+        log.info('No messages found.');
+      }
+      const endTime = performance.now();
+      log.info(`'research-agent' ran for ${endTime - startTime} milliseconds`);
+    } catch (error) {
+      console.error(error);
+    }
+  });
+
+program
+  .command('planning-agent')
+  .description('Execute a planning agent to find migration concerns')
+  .option('-c, --config <config.yaml>', 'LLM Provider configuration file')
+  .requiredOption('-s, --scenario <scenario>', 'Migration scenario to research')
+  .option('-m, --max-search-results <maxSearchResults>', 'Maximum number of search results', '5')
+  .action(async (options) => {
+    try {
+      const startTime = performance.now();
+      const configLoader = ConfigLoader.getInstance(options.config);
+      const config = configLoader.getConfig();
+      const scenario = options.scenario;
+      const maxSearchResults = parseInt(options.maxSearchResults);
+      log.info(`Researching ${scenario}...`);
+
+      let result = await planningGraph.invoke({
         migrationScenario: scenario,
         llmConfig: config,
         maxSearchResults,
